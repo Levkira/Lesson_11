@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lesson 11</title>
+</head>
+<body>
+<script>
+    let toDo = {
+        lastId: 0,
+        notes: [],
+        createNote: function(textNote) {
+            let existedNote = this.notes.findIndex(function(el) {
+                if(el.text === textNote) {
+                    return true;
+                }    
+            });
+            if(existedNote >= 0) {
+                console.log('Note already exists!');
+                return;
+            }
+            let newNote = {
+                text:textNote,
+                date: new Date(),
+                isDone: false,
+                id: ++this.lastId,
+            };
+            this.notes.push(newNote);
+            console.log('Note has been created');
+            this.showNote();
+        },
+        removeNote: function(id) {
+            let currentNoteId = this.notes.findIndex(function(note) {
+                if(note.id === id) {
+                    return true;
+                }
+            });
+            let agreement = confirm('Note will be deleted. Are you sure?');
+            if(agreement) {
+                this.notes.splice(currentNoteId, 1);
+                console.log('Note was deleted');
+            }
+        },
+        updateNote: function(id, editText) {
+            let currentNoteId = this.notes.findIndex(function(note) {
+                if(note.id === id) {
+                    return true;
+                }
+            });
+            if(currentNoteId === -1) {
+                console.log('Note does not exist!');
+                return;
+            }
+             let agreement = confirm('Note will be changed. Are you sure?');
+            if(agreement) {
+                this.notes[currentNoteId].text = editText;
+                console.log('Note was changed');
+            }
+             this.showNote();
+        },
+        setNoteStatus: function(id) {
+            let currentNoteId = this.notes.findIndex(function(note) {
+                if(note.id === id) {
+                    return true;
+                }
+            });
+            if(currentNoteId === -1) {
+                console.log('Note does not exist!');
+                return;
+            }
+            this.notes[currentNoteId].isDone = !this.notes[currentNoteId].isDone;
+            this.showNote();
+        },
+        getCountOfDone: function() {
+            let totalNotes = this.notes.length;
+            let isDoneNotes = this.notes.filter(function(note) {
+                if(note.isDone) {
+                    return true;
+                }
+            }).length;
+            return totalNotes + ' / ' + isDoneNotes + ' / ' + (totalNotes - isDoneNotes);
+        },
+        sortNoteByStatus: function() {
+            this.notes.sort(function(a, b) {
+                if(a.isDone === b.isDone) {
+                    return 0;
+                }
+                if(a.isDone && !b.isDone) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+            this.showNote();
+        },
+        sortNoteByAlphabet: function() {
+            this.notes.sort(function(a, b) {
+                if(a.text.toLowerCase() > b.text.toLowerCase()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+            this.showNote();
+        },
+        showNote: function() {
+            let res = this.notes.reduce(function(result, currentNote) {
+                let noteDate = currentNote.date.getDate() + '/' + (currentNote.date.getMonth()+1) + '/' + currentNote.date.getFullYear();
+                let done = currentNote.isDone ? 'Done' : 'Not done';
+                return result += currentNote.id + '. ' + currentNote.text + ' , ' + noteDate + ' , ' + done + '\n'; 
+            },'');
+            console.log(res);
+        }
+    }
+    Object.seal(toDo);
+</script>
+</body>
+</html>
+
