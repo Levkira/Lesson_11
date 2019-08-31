@@ -78,7 +78,7 @@
                     return true;
                 }
             }).length;
-            return totalNotes + ' / ' + isDoneNotes + ' / ' + (totalNotes - isDoneNotes);
+            return 'Total ' + totalNotes + ' / Done ' + isDoneNotes + ' / Not Done ' + (totalNotes - isDoneNotes);
         },
         sortNoteByStatus: function() {
             this.notes.sort(function(a, b) {
